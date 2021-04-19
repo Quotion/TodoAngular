@@ -1,0 +1,46 @@
+<!-- <form [formGroup]="myFirstReactiveForm">
+    <label for="text">Text</label>
+        <input type="text" id="text" formControlName="text" />
+    <br/><br/>
+  
+    <label for="project">project</label>
+        <select formControlName="state">
+            <option *ngFor="let state of states" [ngValue]="state">
+            {{ state.name }}
+            </option>
+        </select>
+    <br/><br/>
+  
+    <button type="submit">отправить</button>
+</form>  -->
+<p>
+    <mat-toolbar color="primary">
+        <span>Todo Project</span>
+        <span class="main-spacer"></span>
+        <a href="#">
+        <mat-icon class="plus-icon" aria-hidden="false" aria-label="Add new todo">add</mat-icon>
+        </a>
+    </mat-toolbar>
+</p>
+
+<div *ngIf="!loading">
+    <mat-grid-list cols="3">
+        <ul *ngFor="let project of projectService.projects; let i = index">
+            <mat-grid-tile>
+                <mat-card> 
+                    <mat-card-title class="project-spacer">
+                        <mat-grid-tile-header class="project-spacer">{{ project.title }}</mat-grid-tile-header>
+                    </mat-card-title>
+                    <div class="todo-spacer"></div>
+                    <ul *ngFor="let todo of project.todo_projects; let i = index">
+                        <mat-card-content><input type="checkbox">{{ todo.text }}</mat-card-content>
+                    </ul>
+                </mat-card>
+            </mat-grid-tile>
+        </ul>
+    </mat-grid-list>
+</div>
+
+<p *ngIf="loading" class="main-spinner">
+    <mat-spinner></mat-spinner>
+</p>
