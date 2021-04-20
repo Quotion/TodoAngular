@@ -13,14 +13,24 @@ export class ProjectsComponent implements OnInit {
     constructor( public projectService: ProjectService) { }
 
     public loading: boolean = true
+    public showHide: boolean = false
 
     myFirstReactiveForm : FormGroup = new FormGroup({
         "text": new FormControl("", Validators.required),
-        "project": new FormControl("", Validators.required)
+        "project": new FormControl("", Validators.required),
+        "new_project": new FormControl("", Validators.required)
     });
 
     ngOnInit(): void {
         this.projectService.getData().subscribe(() => this.loading = false);
+        this.myFirstReactiveForm.get('project')?.valueChanges.subscribe(value => { 
+            console.log(value)
+            if (value == 0) {
+                this.showHide = true;
+            } else {
+                this.showHide = false;
+            }
+        });
     }
 
     onChange(prj_id: number, todo_id: number) {
@@ -35,21 +45,20 @@ export class ProjectsComponent implements OnInit {
     }
 
     onSubmit() {
-        console.log(this.myFirstReactiveForm.value)
-        this.projectService.createTodo(this.myFirstReactiveForm.value['project'], this.myFirstReactiveForm.value['text'])
+        this.projectService.createTodo(this.myFirstReactiveForm.value['project'], 
+                                       this.myFirstReactiveForm.value['text'], 
+                                       this.myFirstReactiveForm.value['new_project'])
     }
 
 
-    isTodoExists(Todo: string): boolean {
-        const control = this.myFirstReactiveForm.controls[Todo];
+    isExists(input: string): boolean {
+        const control = this.myFirstReactiveForm.controls[input];
         const result = control.invalid && control.touched;
         return result;
     }
 
-    isProjectExists(Project: number): boolean {
-        const control = this.myFirstReactiveForm.controls[Project];
-        const result = control.invalid && control.touched;
-        return result;
+    onCreateProject() {
+        
     }
 
     goToModal(){

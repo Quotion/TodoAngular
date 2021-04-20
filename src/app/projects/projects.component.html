@@ -1,18 +1,3 @@
-<!-- <form [formGroup]="myFirstReactiveForm">
-    <label for="text">Text</label>
-        <input type="text" id="text" formControlName="text" />
-    <br/><br/>
-  
-    <label for="project">project</label>
-        <select formControlName="state">
-            <option *ngFor="let state of states" [ngValue]="state">
-            {{ state.name }}
-            </option>
-        </select>
-    <br/><br/>
-  
-    <button type="submit">отправить</button>
-</form>  -->
 <p>
     <mat-toolbar color="primary">
         <span>Todo Project</span>
@@ -62,21 +47,32 @@
                         <mat-label>Новое задание</mat-label>
                         <input formControlName="text" id="text" matInput placeholder="Что планируем?">
                     </mat-form-field>
-                    <mat-error *ngIf="isTodoExists('text')">
+                    <mat-error *ngIf="isExists('text')">
                         Задача не должна быть <strong>пустой</strong>
                     </mat-error>
                     <br/><br/>
 
                     <mat-form-field class="full-width">
-                        <mat-label>Выберите проект</mat-label> 
+                        <mat-label>Выберите категорию</mat-label> 
                         <mat-select formControlName="project" id="project">
                             <mat-option *ngFor="let project of this.projectService.projects" [value]="project.id">
                                 {{project.title}}
                             </mat-option>
+                            <mat-divider></mat-divider>
+                            <mat-option [value]="0">Новая категория</mat-option>
                         </mat-select>
                     </mat-form-field>
-                    <mat-error *ngIf="isTodoExists('project')">
-                        Выберите <strong>проект</strong>
+                    <mat-error *ngIf="isExists('project')">
+                        Выберите <strong>категорию</strong>
+                    </mat-error>
+                    <br/><br/>
+
+                    <mat-form-field *ngIf="showHide" class="full-width">
+                        <mat-label>Новая категория</mat-label>
+                        <input formControlName="new_project" id="new_project" matInput placeholder="Какую категорию создадим?">
+                    </mat-form-field>
+                    <mat-error *ngIf="isExists('project')">
+                        Категория не может быть <strong>пустой</strong>
                     </mat-error>
                     <br/><br/>
                         

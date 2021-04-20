@@ -79,9 +79,15 @@ export class ProjectService {
             () => {console.log("The PATCH observable is now completed.");});
     }
 
-    createTodo(prj_id: number, todo: string){
-        const term = "todo_projects/"
-        const body = {project_id: prj_id, todo: todo}
+    createTodo(prj_id: number, todo: string, new_project: string){
+        const term = "todo_projects/";
+        let body;
+        if (new_project) {
+            body = {project_id: 0, todo: todo, new_project: new_project};
+        } else {
+            body = {project_id: prj_id, todo: todo, new_project: ""};
+        }
+        console.log(body)
         return this.http.post(this.url + term, body).subscribe(
             (val) => {console.log("POST call successful value returned in body", val);},
             response => { console.log("POST call in error", response);},
