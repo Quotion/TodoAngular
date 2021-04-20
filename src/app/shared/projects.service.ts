@@ -59,7 +59,7 @@ export class ProjectService {
 
     // http://localhost:3000/v1/
     // https://quiet-lake-55143.herokuapp.com/v1/
-    private url: string = "http://localhost:3000/v1/"
+    private url: string = "https://quiet-lake-55143.herokuapp.com/v1/"
 
     getData() {
         const term = "projects/";
