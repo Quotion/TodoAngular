@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { Observable } from 'rxjs';
 import { map, tap, delay } from 'rxjs/operators'
-import { plainToClass } from 'class-transformer';
+import { plainToClass, Type } from 'class-transformer';
 
 // export interface Todo {
 //     id: number
@@ -21,15 +21,15 @@ export class Todo {
     text: string = "";
     isCompleted: boolean = false;
     
-    getText(){
+    public getText(){
         return this.text
     }
 
-    getCompleted(){
+    public getCompleted(){
         return this.isCompleted
     }
 
-    setCompleted(value: boolean) {
+    public setCompleted(value: boolean) {
         this.isCompleted = value
     }
 }
@@ -38,14 +38,15 @@ export class Project {
     id: number = 0;
     title: string = "";
 
+    @Type(() => Todo)
     todo_projects: Todo[] = [];
 
-    getTitle(){
-        return this.title
+    public getTitle(){
+        return this.title;
     }
 
-    getTodos(){
-        return this.todo_projects
+    public getTodo(id: number)  {
+        return this.todo_projects[id];
     }
 }
   
@@ -56,11 +57,24 @@ export class ProjectService {
 
     public projects: Project[] = [];
 
+    // https://quiet-lake-55143.herokuapp.com/v1/
+    private url: string = "http://localhost:3000/v1/"
+
     getData() {
-        const url = "https://quiet-lake-55143.herokuapp.com/v1/projects/";
-        return this.http.get<Project[]>(url).pipe(delay(2000),
+        const term = "projects/";
+        console.log(this.url + term)
+        return this.http.get<Project[]>(this.url + term).pipe(delay(2000),
             tap(project => this.projects = project),
             map(response => plainToClass(Project, response as Object[]))
         );
+    }
+
+    changeCheck(prj_id: number, todo_id: number, isCompleted: boolean){
+        const term = "projects/" + String(prj_id) + "/todo_projects/" + String(todo_id) 
+        const body = {isCompleted: isCompleted}
+        return this.http.patch(this.url + term, body).subscribe(
+            (val) => {console.log("PATCH call successful value returned in body", val);},
+            response => { console.log("PATCH call in error", response);},
+            () => {console.log("The PATCH observable is now completed.");});
     }
 }

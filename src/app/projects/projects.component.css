@@ -18,3 +18,7 @@
     margin-left: center;
     margin-right: center;
 }
+
+.done {
+    text-decoration: line-through;
+}
