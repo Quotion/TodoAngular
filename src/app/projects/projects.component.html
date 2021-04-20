@@ -19,7 +19,7 @@
                         </mat-card-title>
                         <mat-divider></mat-divider>
                         <div class="todo-spacer"></div>
-                        <ul *ngFor="let todo of project.todo_projects; let i = index">
+                        <ul *ngFor="let todo of project.todo_projects">
                             <mat-card-content>
                                 <mat-checkbox class="font-text-todo" (change)="onChange(project.id, todo.id)" [class.done]="todo.isCompleted" [checked]="todo.isCompleted">{{ todo.text }}</mat-checkbox>
                             </mat-card-content>
@@ -31,7 +31,7 @@
     </mat-grid-list>
 </div>
 
-<p *ngIf="loading" class="main-spinner">
+<p *ngIf="loading" class="main-spinner container">
     <mat-spinner></mat-spinner>
 </p>
 
@@ -76,8 +76,8 @@
                     </mat-error>
                     <br/><br/>
                         
-                    <a href="#" class="half-width" mat-raised-button>Отмена</a>
-                    <button class="half-width" on-click="onClick()" mat-raised-button color="primary" type="submit">ОК</button>
+                    <button on-click="outOfModal()" class="half-width" mat-raised-button>Отмена</button>
+                    <button on-click="outOfModal()" class="half-width" mat-raised-button color="primary" type="submit">ОК</button>
                 </form>
             </mat-card-content>
         </mat-card>

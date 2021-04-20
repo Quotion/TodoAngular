@@ -1,5 +1,7 @@
 import { Component, Injectable, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
+import { pipe } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { ProjectService } from '../shared/projects.service';
 
 
@@ -34,22 +36,28 @@ export class ProjectsComponent implements OnInit {
     }
 
     onChange(prj_id: number, todo_id: number) {
-        let todos = this.projectService.projects[prj_id - 1].todo_projects
-        for(let todo of todos) {
-            if (todo.id == todo_id) {
-                todo.isCompleted = !todo.isCompleted;
-                this.projectService.changeCheck(prj_id, todo_id, todo.isCompleted)  
-                break;
+        for(let project of this.projectService.projects) {
+            if (project.id == prj_id) {
+                let todos = project.todo_projects;
+                for(let todo of todos) {
+                    if (todo.id == todo_id) {
+                        todo.isCompleted = !todo.isCompleted;
+                        this.projectService.changeCheck(prj_id, todo_id, todo.isCompleted)  
+                        break;
+                    }
+                }
             }
         }
     }
 
     onSubmit() {
+        this.loading = true;
         this.projectService.createTodo(this.myFirstReactiveForm.value['project'], 
                                        this.myFirstReactiveForm.value['text'], 
-                                       this.myFirstReactiveForm.value['new_project'])
+                                       this.myFirstReactiveForm.value['new_project']);
+        this.myFirstReactiveForm.reset();
+        this.projectService.getData().subscribe(() => this.loading = false);
     }
-
 
     isExists(input: string): boolean {
         const control = this.myFirstReactiveForm.controls[input];
@@ -57,15 +65,11 @@ export class ProjectsComponent implements OnInit {
         return result;
     }
 
-    onCreateProject() {
-        
+    outOfModal(){
+        window.location.replace('/#');
     }
 
     goToModal(){
         window.location.replace('/#demo-modal');
-    }
-
-    onClick(){
-        window.location.replace('/');
     }
 }

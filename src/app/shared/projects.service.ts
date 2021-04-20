@@ -64,7 +64,7 @@ export class ProjectService {
     getData() {
         const term = "projects/";
         console.log(this.url + term)
-        return this.http.get<Project[]>(this.url + term).pipe(delay(2000),
+        return this.http.get<Project[]>(this.url + term).pipe(
             tap(project => this.projects = project),
             map(response => plainToClass(Project, response as Object[]))
         );
@@ -87,7 +87,6 @@ export class ProjectService {
         } else {
             body = {project_id: prj_id, todo: todo, new_project: ""};
         }
-        console.log(body)
         return this.http.post(this.url + term, body).subscribe(
             (val) => {console.log("POST call successful value returned in body", val);},
             response => { console.log("POST call in error", response);},
