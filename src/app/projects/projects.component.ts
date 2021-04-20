@@ -14,6 +14,11 @@ export class ProjectsComponent implements OnInit {
 
     public loading: boolean = true
 
+    myFirstReactiveForm : FormGroup = new FormGroup({
+        "text": new FormControl("", Validators.required),
+        "project": new FormControl("", Validators.required)
+    });
+
     ngOnInit(): void {
         this.projectService.getData().subscribe(() => this.loading = false);
     }
@@ -29,17 +34,29 @@ export class ProjectsComponent implements OnInit {
         }
     }
 
+    onSubmit() {
+        console.log(this.myFirstReactiveForm.value)
+        this.projectService.createTodo(this.myFirstReactiveForm.value['project'], this.myFirstReactiveForm.value['text'])
+    }
 
-    // states = [
-    //     {name: 'Arizona'},
-    //     {name: 'California'},
-    //     {name: 'Colorado'},
-    //     {name: 'New York'},
-    //     {name: 'Pennsylvania'},
-    // ];
 
-    // myFirstReactiveForm : FormGroup = new FormGroup({
-    //     "text": new FormControl("", Validators.required),
-    //     "project": new FormControl(this.states[3], Validators.required)
-    // });
+    isTodoExists(Todo: string): boolean {
+        const control = this.myFirstReactiveForm.controls[Todo];
+        const result = control.invalid && control.touched;
+        return result;
+    }
+
+    isProjectExists(Project: number): boolean {
+        const control = this.myFirstReactiveForm.controls[Project];
+        const result = control.invalid && control.touched;
+        return result;
+    }
+
+    goToModal(){
+        window.location.replace('/#demo-modal');
+    }
+
+    onClick(){
+        window.location.replace('/');
+    }
 }

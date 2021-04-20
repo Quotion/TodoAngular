@@ -17,25 +17,26 @@
     <mat-toolbar color="primary">
         <span>Todo Project</span>
         <span class="main-spacer"></span>
-        <button>
+        <button mat-icon-button on-click="goToModal()" class="button-plus">
             <mat-icon class="plus-icon" aria-hidden="false" aria-label="Add new todo">add</mat-icon>
         </button>
     </mat-toolbar>
 </p>
 
-<div *ngIf="!loading">
+<div *ngIf="!loading" class="container">
     <mat-grid-list cols="3">
         <ul *ngFor="let project of projectService.projects; let i = index">
             <mat-grid-tile>
-                <mat-card> 
+                <mat-card class="full-width-to-grid"> 
                     <mat-card-content>
-                        <mat-card-title class="project-spacer">
-                            <mat-grid-tile-header class="project-spacer">{{ project.title }}</mat-grid-tile-header>
+                        <mat-card-title class="project-spacer font-title-project">
+                            {{ project.title }}
                         </mat-card-title>
+                        <mat-divider></mat-divider>
                         <div class="todo-spacer"></div>
                         <ul *ngFor="let todo of project.todo_projects; let i = index">
                             <mat-card-content>
-                                <mat-checkbox (change)="onChange(project.id, todo.id)" [class.done]="todo.isCompleted" [checked]="todo.isCompleted">{{ todo.text }}</mat-checkbox>
+                                <mat-checkbox class="font-text-todo" (change)="onChange(project.id, todo.id)" [class.done]="todo.isCompleted" [checked]="todo.isCompleted">{{ todo.text }}</mat-checkbox>
                             </mat-card-content>
                         </ul>
                     </mat-card-content>
@@ -46,5 +47,43 @@
 </div>
 
 <p *ngIf="loading" class="main-spinner">
-    <mat-spinner diameter="50px"></mat-spinner>
+    <mat-spinner></mat-spinner>
 </p>
+
+<div id="demo-modal" class="modal">
+    <div class="modal__content">
+        <mat-card>
+            <mat-card-title><h3>НОВАЯ ЗАДАЧА</h3></mat-card-title>
+            <mat-divider></mat-divider>
+            <mat-card-content>
+                <br>
+                <form [formGroup]="myFirstReactiveForm" (submit)="onSubmit()">
+                    <mat-form-field class="full-width">
+                        <mat-label>Новое задание</mat-label>
+                        <input formControlName="text" id="text" matInput placeholder="Что планируем?">
+                    </mat-form-field>
+                    <mat-error *ngIf="isTodoExists('text')">
+                        Задача не должна быть <strong>пустой</strong>
+                    </mat-error>
+                    <br/><br/>
+
+                    <mat-form-field class="full-width">
+                        <mat-label>Выберите проект</mat-label> 
+                        <mat-select formControlName="project" id="project">
+                            <mat-option *ngFor="let project of this.projectService.projects" [value]="project.id">
+                                {{project.title}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-error *ngIf="isTodoExists('project')">
+                        Выберите <strong>проект</strong>
+                    </mat-error>
+                    <br/><br/>
+                        
+                    <a href="#" class="half-width" mat-raised-button>Отмена</a>
+                    <button class="half-width" on-click="onClick()" mat-raised-button color="primary" type="submit">ОК</button>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

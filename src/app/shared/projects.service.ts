@@ -57,6 +57,7 @@ export class ProjectService {
 
     public projects: Project[] = [];
 
+    // http://localhost:3000/v1/
     // https://quiet-lake-55143.herokuapp.com/v1/
     private url: string = "http://localhost:3000/v1/"
 
@@ -77,4 +78,14 @@ export class ProjectService {
             response => { console.log("PATCH call in error", response);},
             () => {console.log("The PATCH observable is now completed.");});
     }
+
+    createTodo(prj_id: number, todo: string){
+        const term = "todo_projects/"
+        const body = {project_id: prj_id, todo: todo}
+        return this.http.post(this.url + term, body).subscribe(
+            (val) => {console.log("POST call successful value returned in body", val);},
+            response => { console.log("POST call in error", response);},
+            () => {console.log("The POST observable is now completed.");});
+    }
+
 }
